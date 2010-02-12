@@ -77,7 +77,7 @@ package require xml;#		xml package  (comes with tclxml)
 #				pure Tcl coded version, which will be loaded
 #				if the shared library fails to load (eg because
 #				of a platform mismatch).
-if {![namespace exists ::Rivet]} {
+if {![namespace exists ::Rivet] && [info exists ::env(REQUEST_METHOD)] } {
     package require cgi;#		Don Libes CGI package (included with this package)
 }
 
@@ -147,10 +147,12 @@ namespace eval Facebook {
 	  [string length "$options(-secret)"] == 0} {
 	error "Facebook: -api_key and -secret are *required* options!"
       }
-      if {[catch {package present cgi}]} {
-	install cgi_methods using ::Facebook::rivet_methods %%AUTO%%
+      if {[namespace exists ::Rivet]} {
+          install cgi_methods using ::Facebook::rivet_methods %%AUTO%%
+      } elseif {![catch {package present cgi}]} {
+          install cgi_methods using ::Facebook::cgi_api %%AUTO%%
       } else {
-	install cgi_methods using ::Facebook::cgi_api %%AUTO%%
+          install cgi_methods using ::Facebook::headless_methods %%AUTO%%
       }
       # install the sub class object, passing it the api_key and secret
       install api_client using ::Facebook::FacebookRestClient %%AUTO%% \
@@ -3336,7 +3338,37 @@ namespace eval Facebook {
       return [::cgi_quote_url $text]
     }
   }
-
+  snit::type headless_methods {
+    # offline implementation of cgi_methods when not running under a web server
+    method import_cookies {arrayVar} {
+      upvar $arrayVar array
+      array set array [list]
+    }
+    method import_params {arrayVar} {
+      upvar $arrayVar array
+      array set array [list]
+    }
+    method cookie_set {name value args} {
+      # ignored
+    }
+    method http_head {} {
+      error "cannot send headers in headless mode"
+    }
+    method location {url} {
+      error "cannot redirect in headless mode"
+    }
+    method exit {} {
+      error "exiting"
+    }
+    method makeurl_from_env {var} {
+      error "cannot makeurl in headless mode"
+    }
+    method quote_url {text} {
+      set badchars {[^a-zA-Z0-9]}
+      set substitution {[if {"\\&" == " "} { return "+" } else { format %%%02.2x [scan "\\&" %c] } ]}
+      return [subst [regsub -all $badchars $text $substitution]]
+    }
+  }
 }
 
 package provide Facebook 1.4.2
