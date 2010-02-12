@@ -2443,9 +2443,10 @@ namespace eval Facebook {
       set post_params {}
       #puts stderr "*** $self post_request: params = $params"
       foreach {key val} $params {
-	if {[llength $val] > 1} {
-	  set val [join $val ,]
-	}
+# The following is supposed to make passing lists easier, but it also corrupts strings with spaces.
+#	if {[llength $val] > 1} {
+#	  set val [join $val ,]
+#	}
         lappend post_params "$key=[$cgi_methods quote_url $val]"
         set param_array($key) $val
 	
