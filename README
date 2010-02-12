@@ -1,0 +1,53 @@
+Sat Feb 28 09:33:05 2009 Robert Heller <heller@deepsoft.com>
+
+This is a port of Facebook's API that I translated from php to Tcl,
+using SNIT as the OO framework and using Don Libes's cgi.tcl package to
+implement the low-level CGI/HTML layer.  The API has been lightly
+tested by using it for a simple Facebook application that I wrote.
+
+The source tree is organized like this:
+
+BuildScripts -- This directory contains various scripts / StarKits used
+		to build the package.
+
+Common       -- This directory contains the distributed library scripts.
+		There are two: Facebook.tcl, which is a port of
+		facebook.php and facebookapi_php5_restlib.php and
+		cgi.tcl, which is Don Libes's Tcl code for writing CGI
+		scripts in Tcl.
+
+Doc	     -- Contains the documentation for the package.
+
+Doc/Internals -- Contains the LaTeX source for the internals
+		documentation.  Actually, most of the actual
+		documentation is in the source code.  This directory
+		contains the build logical to extract the documentation
+		from the source code and product PDF and HTML manuals.
+
+Doc/Support  -- Contains support for the internals documentation
+		extraction.
+
+HelloUser    -- Contains an example application script.
+
+To 'build' the package you will need:
+
+Tcl installed (8.4 or later).
+Tcllib installed (includes the snit, md5, and uri packages).
+TclXML installed
+At least a native tclkit (download one from http://www.equi4.com/tclkit.html)
+SDX, the Starkit/Starpack utility (download from http://www.equi4.com/sdx.html)
+LaTeX and tex4ht are needed to build the documentation.
+
+If your web server has Tcl, Tcllib, and TclXML installed, you don't
+actually have to build anything.  Just make a directory named
+TclIncludes that is parallel to your websites DOCUMENT_ROOT and put all
+of the Tcl files in Common in this directory (there are three files:
+Facebook.tcl, cgi.tcl, and pkgIndex.tcl), and then put your application
+script (adapted from the HelloUser.tcl file in HelloUser) someplace
+where a CGI script would go -- either a cgi-bin directory (a directory
+that is a ScriptAlias w/ Options ExecCGI OR a directory with a
+'AddHandler cgi-script .cgi' directive.  Rename it with a proper
+extension (eg .cgi) and make sure it is executable (chmod'ed with +x)
+and you should be all set.  Make sure that your script file starts with
+a line starting with '#!' and containg the proper path to your installed
+tclsh executable.  You can use pgtslsh if you want to use PostgreSQL.

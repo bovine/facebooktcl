@@ -1,0 +1,25 @@
+Thu Feb  4 16:30:43 2010
+
+   Release 1.4.2: Various minor fixes.
+		Second 1.5 release candidate *untested*.
+
+Thu Feb  4 13:43:54 2010
+
+   Release 1.4.1: Changed to support both Don Libes's cgi.tcl AND Rivet.
+		This is a 1.5 release candidate *untested*.
+		
+
+Thu Feb  4 12:30:52 2010
+
+    Release 1.4: Small fix: 
+		$generate_session_secret => $options(-generate_session_secret)
+		in method validate_fb_params.
+
+Sat Feb 28 10:11:09 2009
+
+    Release 1.1: Minor Documentation updates (README, AUTHORS, ChangeLog)
+
+
+Fri Feb 27 04:12:44 PM EST 2009
+
+    Initial 1.0 release.
