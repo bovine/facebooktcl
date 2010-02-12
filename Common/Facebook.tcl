@@ -905,7 +905,7 @@ namespace eval Facebook {
     }
 
   #***************
-  #* The various (and many!) call_method API functions.  I reorded them in 
+  #* The various (and many!) call_method API functions.  I reordered them in 
   #* alphabetical order.
 
     ::Facebook::facebookCallMethod admin_getAllocation \
@@ -1157,6 +1157,25 @@ namespace eval Facebook {
   #		 An assoc array of four membership lists, with keys
   #                `attending', `unsure', `declined', and `not_replied'.
   # <in> eid  Event id.
+  #
+  # <return> bool True if success, false if not.
+  #
+
+    ::Facebook::facebookCallMethod events_invite \
+					{facebook.events.invite} eid uids personal_message
+  #
+  # Invites users to an event. If a session user exists, the session user
+  # must have permissions to invite friends to the event and $uids must contain
+  # a list of friend ids. Otherwise, the event must have been
+  # created by the app and $uids must contain users of the app.
+  # This method requires the 'create_event' extended permission to
+  # invite people on behalf of a user.
+  #
+  # <ref> result
+  # <in> eid   the event id
+  # <in> uids  an array of users to invite
+  # <in> personal_message  a string containing the user's message
+  #                           (text only)
   #
   # <return> bool True if success, false if not.
   #
@@ -1435,6 +1454,18 @@ namespace eval Facebook {
 	action_links		 $action_links]]
     }
 
+    ::Facebook::facebookCallMethod fql_multi_query {facebook.fql.query} queries
+  #
+  # Makes a set of FQL queries in parallel.  This method takes a dictionary
+  # of FQL queries where the keys are names for the queries.  Results from
+  # one query can be used within another query to fetch additional data.  More
+  # info about FQL queries at http://wiki.developers.facebook.com/index.php/FQL
+  #
+  # <ref> result array  generalized array representing the results
+  # <in> queries  JSON-encoded dictionary of queries to evaluate
+  #
+
+
     ::Facebook::facebookCallMethod fql_query {facebook.fql.query} query
   #
   # Makes an FQL query.  This is a generalized way of accessing all the data
@@ -1516,6 +1547,24 @@ namespace eval Facebook {
   # <return> bool True if success, false if not.
   #
 
+
+
+    ::Facebook::facebookCallMethod friends_getMutualFriends \
+                                {facebook.friends.getMutualFriends} \
+                                target_uid {source_uid {}}
+  #
+  # Returns the mutual friends between the target uid and a source uid or
+  # the current session user.
+  #
+  # <ref> An array of friend uids
+  # <in> target_uid Target uid for which mutual friends will be found.
+  # <in> source_uid (optional) Source uid for which mutual friends will
+  #                            be found. If no source_uid is specified,
+  #                            source_id will default to the session user.
+  # <return> bool True if success, false if not.
+  #
+
+
     ::Facebook::facebookCallMethod friends_getLists \
 				{facebook.friends.getLists}
   #
@@ -1552,6 +1601,37 @@ namespace eval Facebook {
   #
   # <return> bool True if success, false if not.
   #
+
+
+      ::Facebook::facebookCallMethod links_get \
+        {links.get} uid limit {link_ids {}}
+  #
+  # Retrieves links posted by the given user.
+  #
+  # <ref> An array of links.
+  # <in> uid      The user whose links you wish to retrieve
+  # <in> limit    The maximimum number of links to retrieve
+  # <in> link_ids (Optional) Array of specific link
+  #                          IDs to retrieve by this user
+  #
+  # <return> bool True if success, false if not.
+  #
+
+
+      ::Facebook::facebookCallMethod links_post \
+        {links.post} url {comment {}} {uid {}}
+  #
+  # Posts a link on Facebook.
+  #
+  # <ref> bool
+  # <in> url     URL/link you wish to post
+  # <in> comment (Optional) A comment about this link
+  # <in> uid     (Optional) User ID that is posting this link;
+  #                        defaults to current session user
+  #
+  # <return> bool True if success, false if not.
+  #
+
 
     ::Facebook::facebookCallMethod marketplace_createListing \
 				{facebook.marketplace.createListing} \
@@ -1670,6 +1750,72 @@ namespace eval Facebook {
   #
   # <return> bool True if success, false if not.
   #
+
+    ::Facebook::facebookCallMethod notes_create \
+        {notes.create} \
+        title content {uid {}}
+  #
+  # Creates a note with the specified title and content.
+  #
+  # <ref> result The ID of the note that was just created.
+  # <in> title   Title of the note.
+  # <in> content Content of the note.
+  # <in> uid     (Optional) The user for whom you are creating a
+  #                        note; defaults to current session user
+  #
+  # <return> bool True if success, false if not.
+  #
+    
+    ::Facebook::facebookCallMethod notes_delete \
+        {notes.delete} \
+        note_id {uid {}}
+  #
+  # Deletes the specified note.
+  #
+  # <ref> bool
+  # <in> int $note_id  ID of the note you wish to delete
+  # <in> int $uid      (Optional) Owner of the note you wish to delete;
+  #                      defaults to current session user
+  #
+  # <return> bool True if success, false if not.
+  #
+
+
+    ::Facebook::facebookCallMethod notes_edit \
+        {notes.edit} \
+        note_id title content {uid {}}
+  #
+  # Edits a note, replacing its title and contents with the title
+  # and contents specified.
+  #
+  # <ref> bool
+  # <in> int    $note_id  ID of the note you wish to edit
+  # <in> string $title    Replacement title for the note
+  # <in> string $content  Replacement content for the note
+  # <in> int    $uid      (Optional) Owner of the note you wish to edit;
+  #                         defaults to current session user
+  #
+  # <return> bool True if success, false if not.
+  #
+
+
+    ::Facebook::facebookCallMethod notes_get \
+        {notes.get} \
+        uid {note_ids {}}
+  #
+  # Retrieves all notes by a user. If note_ids are specified,
+  # retrieves only those specific notes by that user.
+  #
+  # <ref> array A list of all of the given user's notes, or an empty list
+  #               if the viewer lacks permissions or if there are no visible
+  #               notes.
+  # <in> int    $uid      User whose notes you wish to retrieve
+  # <in> array  $note_ids (Optional) List of specific note
+  #                         IDs by this user to retrieve
+  #
+  # <return> bool True if success, false if not.
+  #
+
 
     ::Facebook::facebookCallMethod notifications_get \
 				{facebook.notifications.get}
@@ -1998,6 +2144,142 @@ namespace eval Facebook {
   # <return> bool True if success, false if not.
   #
 
+    ::Facebook::facebookCallMethod stream_addComment \
+        {facebook.stream.addComment} post_id comment {uid {}}
+  #
+  # Add a comment to a stream post
+  #
+  # <ref> result string the id of the created comment
+  # <in> post_id  the post id
+  # <in> comment  the comment text
+  # <in> uid      the actor (defaults to session user)
+  #
+  # <return> bool True if success, false if not.
+  #
+
+
+    ::Facebook::facebookCallMethod stream_addLike \
+        {facebook.stream.addLike} post_id {uid {}}
+  #
+  # Add a like to a stream post
+  #
+  # <ref> result bool
+  # <in> post_id  the post id
+  # <in> uid      the actor (defaults to session user)
+  #
+  # <return> bool True if success, false if not.
+  #
+
+
+    ::Facebook::facebookCallMethod stream_get \
+        {facebook.stream.get} \
+        {viewer_id {}} {source_ids {}} {start_time {0}} {end_time {0}} \
+        {limit {30}} {filter_key {}} {exportable_only {0}} {metadata {}} {post_ids {}}
+  #
+  # Gets the stream on behalf of a user using a set of users. This
+  # call will return the latest $limit queries between $start_time
+  # and $end_time.
+  #
+  # <ref> returns an array containing these elements:
+  #           'posts'      => array of posts,
+  #           (if requested, the following data may be returned)
+  #           'profiles'   => array of profile metadata of users/pages in posts
+  #           'albums'     => array of album metadata in posts
+  #           'photo_tags' => array of photo_tags for photos in posts
+  # <in> viewer_id  user making the call (def: session)
+  # <in> source_ids users/pages to look at (def: all connections)
+  # <in> start_time start time to look for stories (def: 1 day ago)
+  # <in> end_time   end time to look for stories (def: now)
+  # <in> limit      number of stories to attempt to fetch (def: 30)
+  # <in> filter_key key returned by stream.getFilters to fetch
+  # <in> metadata   metadata to include with the return, allows
+  #                 requested metadata to be returned, such as
+  #                 profiles, albums, photo_tags
+  #
+  # <return> bool True if success, false if not.
+  #
+
+    ::Facebook::facebookCallMethod stream_getComments \
+        {facebook.stream.getComments} post_id
+  #
+  # Gets the full comments given a post_id from stream.get or the
+  # stream FQL table. Initially, only a set of preview comments are
+  # returned because some posts can have many comments.
+  #
+  # <ref> array of comment objects
+  # <in> post_id id of the post to get comments for
+  #
+  # <return> bool True if success, false if not.
+  #
+
+
+    ::Facebook::facebookCallMethod stream_getFilters \
+        {facebook.stream.getFilters} {uid {}}
+  #
+  # Gets the filters (with relevant filter keys for stream.get) for a
+  # particular user. These filters are typical things like news feed,
+  # friend lists, networks. They can be used to filter the stream
+  # without complex queries to determine which ids belong in which groups.
+  #
+  # <ref> array of stream filter objects
+  # <in> uid user to get filters for
+  #
+  # <return> bool True if success, false if not.
+  #
+
+
+    ::Facebook::facebookCallMethod stream_publish \
+                                 {facebook.stream.publish} message \
+                                 {attachment {}} {action_links {}} \
+                                 {target_id {}} {uid {}}
+  #
+  # Publish a post to the user's stream.  Returns the post id.
+  #
+  # <ref> result Name of an array to be filled in the results.
+  # <in> message        the user's message
+  # <in> attachment     the post's attachment (optional)
+  # <in> action_links   the post's action links (optional)
+  # <in> target_id      the user on whose wall the post will be posted
+  #                        (optional)
+  # <in> uid            the actor (defaults to session user)
+  #
+
+
+    ::Facebook::facebookCallMethod stream_remove \
+        {facebook.stream.remove} post_id {uid {}}
+  #
+  # Remove a post from the user's stream.
+  # Currently, you may only remove stories you application created.
+  #
+  # <ref> result bool
+  # <in> post_id  the post id
+  # <in> uid      the actor (defaults to session user)
+  #
+
+    ::Facebook::facebookCallMethod stream_removeComment \
+        {facebook.stream.removeComment} comment_id {uid {}}
+  #
+  # Remove a comment from a stream post
+  #
+  # <ref> result bool
+  # <in> comment_id  the comment id
+  # <in> uid      the actor (defaults to session user)
+  #
+
+
+
+    ::Facebook::facebookCallMethod stream_removeLike \
+        {facebook.stream.removeLike} post_id {uid {}}
+  #
+  # Remove a like from a stream post
+  #
+  # <ref> result bool
+  # <in> post_id  the post id
+  # <in> uid      the actor (defaults to session user)
+  #
+
+
+
     ::Facebook::facebookCallMethod users_getInfo \
 				{facebook.users.getInfo} uids fields
   #
@@ -2065,6 +2347,19 @@ namespace eval Facebook {
   # <in> uid     The user id.
   # <return> bool True if success, false if not.
   #
+
+
+    ::Facebook::facebookCallMethod users_isVerified \
+        {facebook.users.isVerified}
+  #
+  # Returns whether or not the user corresponding to the current
+  # session object is verified by Facebook. See the documentation
+  # for Users.isVerified for details.
+  #
+  # <ref> result true if the user is verified
+  # <return> bool True if success, false if not.
+  #
+
 
     ::Facebook::facebookCallMethod users_setStatus \
 				{facebook.users.setStatus} status {uid {}} \
@@ -2993,6 +3288,7 @@ namespace eval Facebook {
       return [makeurl [env $var]]
     }
     method quote_url {text} {
+      return [escape_string $text]
     }
   }
   snit::type cgi_api {
