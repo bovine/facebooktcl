@@ -696,7 +696,7 @@ namespace eval Facebook {
     #
     # [index] Facebook::json encode_string!command
 
-      regsub -all {["\\]} "$s" {\\\0} s
+      regsub -all {[\"\\]} "$s" {\\\0} s
       return "\"$s\""
     }
     typemethod encode_list {l} {
@@ -1732,7 +1732,7 @@ namespace eval Facebook {
   #
       upvar $result_var result
       return [$self call_method result {facebook.pages.getInfo} [list \
-	page_ids $page_ids fields $fields uid $uid type $_type]
+	page_ids $page_ids fields $fields uid $uid type $_type]]
     }
     
     ::Facebook::facebookCallMethod pages_isAdmin \
@@ -1906,7 +1906,7 @@ namespace eval Facebook {
   #
       upvar $result_var result
       return [$self call_method result {facebook.profile.getFBML} [list \
-	uid $uid type $_type]
+	uid $uid type $_type]]
     }
 
     ::Facebook::facebookCallMethod profile_getInfo \
@@ -1980,7 +1980,7 @@ namespace eval Facebook {
       upvar $result_var result
       return [$self call_method result {facebook.profile.setInfo} [list \
 				title $title type $_type \
-				info_fields $info_fields uid $uid]
+                                info_fields $info_fields uid $uid]]
     }
 
     ::Facebook::facebookCallMethod profile_setInfoOptions \
@@ -2009,7 +2009,7 @@ namespace eval Facebook {
   # <in> fields  A comma-separated list of info field names desired.
   #
   # <return> bool True if success, false if not.
-  #/
+  #
 
     ::Facebook::facebookCallMethod users_getLoggedInUser \
 				{facebook.users.getLoggedInUser}
@@ -2185,7 +2185,7 @@ namespace eval Facebook {
         error {
 	  set error [::http::code $token]
 	  http::cleanup $token
-	  error "Error reading from Facebook: $error
+	  error "Error reading from Facebook: $error"
 	}
       }
     }
