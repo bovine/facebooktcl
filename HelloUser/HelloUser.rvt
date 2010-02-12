@@ -1,0 +1,81 @@
+<?
+#* 
+#* ------------------------------------------------------------------
+#* HelloUser.tcl - Hello User example Facebook application
+#* Created by Robert Heller on Wed Feb 25 13:30:33 2009
+#* ------------------------------------------------------------------
+#* ------------------------------------------------------------------
+#* Contents:
+#* ------------------------------------------------------------------
+#*  
+#*     Facebook API in Tcl Project
+#*     Copyright (C) 2009  Robert Heller D/B/A Deepwoods Software
+#* 			51 Locke Hill Road
+#* 			Wendell, MA 01379-9728
+#* 
+#*     This program is free software; you can redistribute it and/or modify
+#*     it under the terms of the GNU General Public License as published by
+#*     the Free Software Foundation; either version 2 of the License, or
+#*     (at your option) any later version.
+#* 
+#*     This program is distributed in the hope that it will be useful,
+#*     but WITHOUT ANY WARRANTY; without even the implied warranty of
+#*     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#*     GNU General Public License for more details.
+#* 
+#*     You should have received a copy of the GNU General Public License
+#*     along with this program; if not, write to the Free Software
+#*     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+#* 
+#*  
+#* 
+
+#@Chapter:HelloUser.tcl -- Sample Application
+#@Label:HelloUser.tcl
+#$Id: HelloUser.tcl 707 2009-02-27 20:57:47Z heller $
+# This is a trivial application and is a minor variation of a classic 
+# 'Hello World' program.
+
+# As a Rivet Tcl script, we need to find our support code
+# (Facebook.tcl, plus md5, snit, uri, and tclxml) are installed under
+# the standard places (/usr/lib, /usr/share/tcl8.<mumble>, etc.) or a
+# directory already in the library path.
+#
+
+# Now load Facebook code, along with the other support packages.
+
+package require Facebook
+
+namespace eval HelloUser {
+  # Namespace containing the HelloUser application code.
+
+  variable AdminEMailAddress myname@my.domain.name;# Admin E-Mail address
+  variable APIKEY 123456789abcdef0123456789abcdef0;# Your API KEY
+  variable SECRET 0fedcba9876543210fedcba987654321;# Your API Secret
+
+  # Start of application code proper.
+
+  # Get a Facebook object (grabs Facebook parameters
+  variable fb [::Facebook::Facebook %%AUTO%% -api_key $APIKEY -secret $SECRET]
+  
+  # Require a frame and require login
+  $fb require_frame
+  variable UserId [$fb require_login]
+
+  # Generate some HTML / FBML code.
+  puts "<div style=\"padding: 10px;\">"
+  puts "<h2>Hi <fb:name firstnameonly=\"true\" uid=\"$UserId\" useyou=\"false\"/>!</h2>"
+  puts "<br>"
+  if {![$fb added-p]} {
+      puts "<a href=\"[$fb get_add_url]\">Put the Hello User application in your profile!</a>"
+  } else {
+      if {![$fb profile_setFBML resultArray {} $UserId \
+                "Hi <fb:name firstnameonly=\"true\" uid=\"$UserId\" useyou=\"false\"/>!" \
+                {} {} "Hi <fb:name firstnameonly=\"true\" uid=\"$UserId\" useyou=\"false\"/>!"]} {
+	  puts "<h2>Error occurred on profile_setFBML: [$fb getErrorCode] [$fb getErrorMessage]</h2>"
+      }
+  }
+  puts "</div>"
+}
+
+?>
