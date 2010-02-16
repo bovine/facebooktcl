@@ -1514,7 +1514,7 @@ namespace eval Facebook {
   #  reduce overhead.
   #
 
-      if {$uid == 0 || $uid = $user} {
+      if {$uid == 0 || $uid == $user} {
         if {[info exists friends_list]} {
 	  if {[llength $flid] == 0} {
 	    return $friends_list
