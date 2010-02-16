@@ -36,7 +36,7 @@
 #*						FacebookAPIErrorCodes
 #*		SNIT Macros: facebookCallMethod
 #* Externals:
-#*		Package provided: Facebook 1.6
+#*		Package provided: Facebook 1.6.1
 #*		Packages required: http, md5, snit, xml, cgi
 #* ------------------------------------------------------------------
 #*  
@@ -64,7 +64,7 @@
 
 #@Chapter:Facebook.tcl -- Facebook API in Tcl
 #@Label:Facebook.tcl
-#$Id: Facebook.tcl 813 2010-02-16 15:14:22Z heller $
+#$Id: Facebook.tcl 814 2010-02-16 15:49:20Z heller $
 # This is a manual translation / port of the Facebook API code contained in
 # facebook.php and facebookapi_php5_restlib.php.
 
@@ -813,7 +813,7 @@ namespace eval Facebook {
     foreach a $args {
       lappend arglist "$a"
       if {[llength $a] > 1} {set a [lindex $a 0]}
-      append paramcode " $a \$$a"
+      append paramcode " $a \"\$$a\""
     }
     append paramcode {]}
     method $name $arglist " \
@@ -3371,4 +3371,4 @@ namespace eval Facebook {
   }
 }
 
-package provide Facebook 1.6
+package provide Facebook 1.6.1
