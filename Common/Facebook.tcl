@@ -36,7 +36,7 @@
 #*						FacebookAPIErrorCodes
 #*		SNIT Macros: facebookCallMethod
 #* Externals:
-#*		Package provided: Facebook 1.6.1
+#*		Package provided: Facebook 1.6.3
 #*		Packages required: http, md5, snit, xml, cgi
 #* ------------------------------------------------------------------
 #*  
@@ -64,7 +64,7 @@
 
 #@Chapter:Facebook.tcl -- Facebook API in Tcl
 #@Label:Facebook.tcl
-#$Id: Facebook.tcl 814 2010-02-16 15:49:20Z heller $
+#$Id: Facebook.tcl 816 2010-02-16 21:35:08Z heller $
 # This is a manual translation / port of the Facebook API code contained in
 # facebook.php and facebookapi_php5_restlib.php.
 
@@ -1752,6 +1752,7 @@ namespace eval Facebook {
   # <return> bool True if success, false if not.
   #
 
+
     ::Facebook::facebookCallMethod notes_create \
         {notes.create} \
         title content {uid {}}
@@ -3371,4 +3372,4 @@ namespace eval Facebook {
   }
 }
 
-package provide Facebook 1.6.1
+package provide Facebook 1.6.3

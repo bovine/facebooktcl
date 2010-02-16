@@ -1,4 +1,4 @@
-AC_INIT(FacebookTcl,1.6.1)
+AC_INIT(FacebookTcl,1.6.3)
 AC_CONFIG_SRCDIR(Common/Facebook.tcl)
 AM_INIT_AUTOMAKE
 AC_CONFIG_FILES([BuildScripts/Makefile \
