@@ -8,5 +8,5 @@
 # script is sourced, the variable $dir must contain the
 # full path name of this file's directory.
 
-package ifneeded Facebook 1.4.2 [list source [file join $dir Facebook.tcl]]
+package ifneeded Facebook 1.5 [list source [file join $dir Facebook.tcl]]
 package ifneeded cgi 0.6.4 [list source [file join $dir cgi.tcl]]

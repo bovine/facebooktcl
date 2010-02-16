@@ -36,7 +36,7 @@
 #*						FacebookAPIErrorCodes
 #*		SNIT Macros: facebookCallMethod
 #* Externals:
-#*		Package provided: Facebook 1.4.2
+#*		Package provided: Facebook 1.6
 #*		Packages required: http, md5, snit, xml, cgi
 #* ------------------------------------------------------------------
 #*  
@@ -64,7 +64,7 @@
 
 #@Chapter:Facebook.tcl -- Facebook API in Tcl
 #@Label:Facebook.tcl
-#$Id: Facebook.tcl 803 2010-02-04 22:15:54Z heller $
+#$Id: Facebook.tcl 813 2010-02-16 15:14:22Z heller $
 # This is a manual translation / port of the Facebook API code contained in
 # facebook.php and facebookapi_php5_restlib.php.
 
@@ -1164,7 +1164,8 @@ namespace eval Facebook {
   #
 
     ::Facebook::facebookCallMethod events_invite \
-					{facebook.events.invite} eid uids personal_message
+					{facebook.events.invite} eid uids \
+							personal_message
   #
   # Invites users to an event. If a session user exists, the session user
   # must have permissions to invite friends to the event and $uids must contain
@@ -1467,7 +1468,6 @@ namespace eval Facebook {
   # <in> queries  JSON-encoded dictionary of queries to evaluate
   #
 
-
     ::Facebook::facebookCallMethod fql_query {facebook.fql.query} query
   #
   # Makes an FQL query.  This is a generalized way of accessing all the data
@@ -1565,7 +1565,6 @@ namespace eval Facebook {
   #                            source_id will default to the session user.
   # <return> bool True if success, false if not.
   #
-
 
     ::Facebook::facebookCallMethod friends_getLists \
 				{facebook.friends.getLists}
@@ -2128,7 +2127,7 @@ namespace eval Facebook {
       upvar $result_var result
       return [$self call_method result {facebook.profile.setInfo} [list \
 				title $title type $_type \
-                                info_fields $info_fields uid $uid]]
+				info_fields $info_fields uid $uid]]
     }
 
     ::Facebook::facebookCallMethod profile_setInfoOptions \
@@ -3372,4 +3371,4 @@ namespace eval Facebook {
   }
 }
 
-package provide Facebook 1.4.2
+package provide Facebook 1.6
