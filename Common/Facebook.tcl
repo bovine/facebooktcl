@@ -3285,7 +3285,7 @@ namespace eval Facebook {
       headers redirect $url
     }
     method exit {} {
-      ::exit
+      abort_page
     }
     method makeurl_from_env {var} {
       return [makeurl [env $var]]
